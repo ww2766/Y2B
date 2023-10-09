@@ -153,12 +153,12 @@ def upload_video(video_file, cover_file, _config, detail):
         "streamers": {
             video_file: {
                 "copyright": 1,
-                "source": "" #detail['origin'],
+                "source": "", #detail['origin']
                 "tid": _config['tid'],  # 投稿分区
                 "cover": cover_file,  # 视频封面
                 "title": title,
                 "desc_format_id": 0,
-                "desc": "" #"搬运：" + detail["origin"],
+                "desc": "", #"搬运：" + detail["origin"]
                 "dolby": 0,  # 杜比音效
                 "dynamic": "",
                 "subtitle": {
