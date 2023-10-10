@@ -77,6 +77,7 @@ def get_file_size(filename):
 
 
 def get_video_list(channel_id: str):
+    print(channel_id)
     res = requests.get(
         "https://www.youtube.com/feeds/videos.xml?" + channel_id).text
     res = xmltodict.parse(res)
