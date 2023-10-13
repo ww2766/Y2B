@@ -135,6 +135,7 @@ def download_video(url, out, format):
             logging.info("付费视频，跳过")
             return False
         logging.error("未知错误:" + out)
+        return False
         raise e
 
 
