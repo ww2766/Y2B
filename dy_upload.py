@@ -152,7 +152,7 @@ def upload(playwright: Playwright,video,_config,cover,detail) -> None:
         title = title[:80]
     browser =  playwright.chromium.launch(headless=True)
 
-    context =  browser.new_context(storage_state=os.getcwd() + "/cookie.json")
+    context =  browser.new_context(storage_state="cookie.json")
     print("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
 
@@ -167,10 +167,10 @@ def upload(playwright: Playwright,video,_config,cover,detail) -> None:
     page.locator(
         "span:has-text(\"点击上传 \")").set_input_files(video,timeout=10000000) 
     page.screenshot(path='example2.png') 
-    #page.get_by_placeholder(text=re.compile(r".*标题，.*更多人.*")).fill("我的xxxxx title",timeout=10000000)
-    #page.get_by_placeholder("写一个合适的标题，会有更多人看到").fill("我的xxxxx title",timeout=10000000)
-    #page.locator(".zone-container").filter(text=re.compile(r".*标题，.*更多人.*")).fill("wkkkkk​作品简介")
-    page.locator(".zone-container").fill("wkkkkk​作品简介")
+    #page.get_by_placeholder(text=re.compile(r".*标题，.*更多人.*")).fill(title,timeout=10000000)
+    #page.get_by_placeholder("写一个合适的标题，会有更多人看到").fill(title,timeout=10000000)
+    #page.locator(".zone-container").filter(text=re.compile(r".*标题，.*更多人.*")).fill(title)
+    page.locator(".zone-container").fill(title)
     page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click()
     page.get_by_text("上传封面").click()
     page.get_by_text("点击上传 或直接将图片文件拖入此区域建议上传4:3(横)或3:4(竖)比例的高清图片，清晰美观的封面利于推荐").click()
