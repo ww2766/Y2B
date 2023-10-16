@@ -30,9 +30,9 @@ jobs:
         python -m pip install --upgrade pip
         sudo apt-get update
         sudo apt-get install ffmpeg -y
-        pip install playwright
-        pip install -r requirements.txt
-        pip install yt-dlp --upgrade
+        python -m pip install playwright
+        python -m pip install -r requirements.txt
+        python -m pip install yt-dlp --upgrade
         sudo timedatectl set-timezone "Asia/Shanghai"
     - name: Ensure browsers are installed
       run: |
@@ -42,4 +42,4 @@ jobs:
       env:
         GIST_ID: ${{secrets.GIST_ID}}
         GIT_TOKEN: ${{secrets.GIT_TOKEN}}
-      run: python dy_upload.py $GIT_TOKEN $GIST_ID --logLevel=${{ inputs.logLevel || 'INFO' }}
+      run: python -m dy_upload.py $GIT_TOKEN $GIST_ID --logLevel=${{ inputs.logLevel || 'INFO' }}
