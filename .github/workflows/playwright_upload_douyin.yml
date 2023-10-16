@@ -1,9 +1,20 @@
 name: playwright upload douyin
 on:
+  schedule:
+    - cron: "*/10 * * * *"
   push:
-    branches: [ main, master ]
-  pull_request:
-    branches: [ main, master ]
+    branches:
+      - "master"
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: "Log level"
+        required: true
+        default: "INFO"
+        type: choice
+        options:
+          - INFO
+          - DEBUG
 jobs:
   test:
     timeout-minutes: 60
