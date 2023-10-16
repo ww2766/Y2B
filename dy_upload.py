@@ -223,7 +223,7 @@ def process_one(detail, config):
     logging.info(f"打印到这来了")
     playwright=sync_playwright() 
     logging.info(f"打印到这来了")
-    ret = upload(playwright,detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
+    ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
     os.remove(detail["vid"] + f".{v_ext}")
     os.remove(detail["vid"] + ".jpg")
     return ret
