@@ -221,12 +221,13 @@ def process_one(detail, config):
     logging.info(f"打印到这来了")
     #ret = upload_video(detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
     logging.info(f"打印到这来了")
-    playwright=sync_playwright() 
+    #playwright=sync_playwright() 
     logging.info(f"打印到这来了")
-    ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
+    with sync_playwright() as playwright:
+        ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
     os.remove(detail["vid"] + f".{v_ext}")
     os.remove(detail["vid"] + ".jpg")
-    return ret
+    return {}
 
 
 def upload_process(gist_id, token):
