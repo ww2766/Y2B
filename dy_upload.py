@@ -150,7 +150,7 @@ def upload(playwright: Playwright,video,_config,cover,detail) -> None:
     title = detail['title']
     if len(title) > 80:
         title = title[:80]
-    browser =  playwright.chromium.launch(headless=False)
+    browser =  playwright.chromium.launch(headless=True)
 
     context =  browser.new_context(storage_state=os.getcwd() + "/cookie.json")
     print("授权位置权限")
