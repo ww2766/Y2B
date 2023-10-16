@@ -216,7 +216,9 @@ def process_one(detail, config):
     if v_ext is None:
         logging.error("无合适格式")
         return
+    logging.info(f"打印到这来了")
     download_cover(detail["cover_url"], detail["vid"] + ".jpg")
+    logging.info(f"打印到这来了")
     #ret = upload_video(detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
     logging.info(f"打印到这来了")
     playwright=sync_playwright() 
