@@ -199,57 +199,7 @@ def upload(playwright: Playwright,video,_config,cover,detail) -> None:
     context.close()
     browser.close()
     return {}
- 
-def upload_video(video_file, cover_file, _config, detail):
-    title = detail['title']
-    if len(title) > 80:
-        title = title[:80]
-    yml = {
-        "line": "kodo",
-        "limit": 3,
-        "streamers": {
-            video_file: {
-                "copyright": 2,
-                "source": "",  
-                "tid": _config['tid'],  # 投稿分区
-                "cover": cover_file,  # 视频封面
-                "title": title,
-                "desc_format_id": 0,
-                "desc": "",  
-                "dolby": 0,  # 杜比音效
-                "dynamic": "",
-                "subtitle": {
-                    "open": 0,
-                    "lan": ""
-                },
-                "tag": _config['tags'],
-                "open_subtitle": False,
-            }
-        }
-    }
-    with open("config.yaml", "w", encoding="utf8") as tmp:
-        t = yaml.dump(yml, Dumper=yaml.Dumper)
-        logging.debug(f"biliup 业务配置：{t}")
-        tmp.write(t)
-    p = subprocess.Popen(
-        ["biliup", "upload", "-c", "config.yaml"],
-        stdout=subprocess.PIPE,
-    )
-    p.wait()
-    if p.returncode != 0:
-        raise Exception(p.stdout.read())
-    buf = p.stdout.read().splitlines(keepends=False)
-    if len(buf) < 2:
-        raise Exception(buf)
-    try:
-        data = buf[-2]
-        data = data.decode()
-        data = re.findall("({.*})", data)[0]
-    except Exception as e:
-        logging.error(f"输出结果错误:{buf}")
-        raise e
-    logging.debug(f'上传完成，返回：{data}')
-    return json.loads(data)
+
 
 
 def process_one(detail, config):
