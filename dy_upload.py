@@ -145,6 +145,7 @@ def download_cover(url, out):
         tmp.write(res)
 
 def upload(playwright: Playwright,video,_config,cover,detail) -> None:
+    logging.info(f"打印到这来了")
     print("开始")
     title = detail['title']
     if len(title) > 80:
@@ -217,7 +218,9 @@ def process_one(detail, config):
         return
     download_cover(detail["cover_url"], detail["vid"] + ".jpg")
     #ret = upload_video(detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
+    logging.info(f"打印到这来了")
     playwright=sync_playwright() 
+    logging.info(f"打印到这来了")
     ret = upload(playwright,detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
     os.remove(detail["vid"] + f".{v_ext}")
     os.remove(detail["vid"] + ".jpg")
