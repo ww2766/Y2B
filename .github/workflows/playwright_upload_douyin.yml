@@ -35,7 +35,9 @@ jobs:
         pip install yt-dlp --upgrade
         sudo timedatectl set-timezone "Asia/Shanghai"
     - name: Ensure browsers are installed
-      run: python -m playwright install --with-deps
+      run: |
+        python -m playwright install --with-deps
+        python -m playwright install chromium
     - name: main logic
       env:
         GIST_ID: ${{secrets.GIST_ID}}
