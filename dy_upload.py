@@ -182,6 +182,7 @@ def upload(playwright: Playwright,video,_config,cover,detail) -> None:
     page.get_by_text("语言情景剧").click()
     page.get_by_text("请选择合集").click()
     page.get_by_text("儿童动画").click()
+    logging.info(f"打印到这来了")
     page.on("dialog", lambda dialog: dialog.accept())
     time.sleep(5)
     try:
