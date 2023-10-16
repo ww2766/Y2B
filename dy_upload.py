@@ -144,16 +144,14 @@ def download_cover(url, out):
     with open(out, "wb") as tmp:
         tmp.write(res)
 
-def upload(playwright: Playwright,video,_config,cover,detail) -> None:
+def upload(playwright: Playwright,video,_config,cover,detail,cookie) -> None:
     logging.info(f"打印到这来了")
     print("开始")
     title = detail['title']
     if len(title) > 80:
         title = title[:80]
     browser =  playwright.chromium.launch(headless=True)
-    with open("cookie.json") as f:
-        storage_state = json.loads(f.read())
-    context =  browser.new_context(storage_state=storage_state)
+    context =  browser.new_context(storage_state=cookie)
     print("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
 
@@ -205,7 +203,7 @@ def upload(playwright: Playwright,video,_config,cover,detail) -> None:
 
 
 
-def process_one(detail, config):
+def process_one(detail, config, cookie):
     logging.info(f'开始：{detail["vid"]}')
     format = ["webm", "flv", "mp4"]
     v_ext = None
@@ -225,7 +223,7 @@ def process_one(detail, config):
     #playwright=sync_playwright() 
     logging.info(f"打印到这来了")
     with sync_playwright() as playwright:
-        ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
+        ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail,cookie)
     os.remove(detail["vid"] + f".{v_ext}")
     os.remove(detail["vid"] + ".jpg")
     return {}
@@ -238,7 +236,7 @@ def upload_process(gist_id, token):
     need_to_process = get_all_video(config)
     need = select_not_uploaded(need_to_process, uploaded)
     for i in need:
-        ret = process_one(i["detail"], i["config"])
+        ret = process_one(i["detail"], i["config"], cookie)
         if ret is None:
             continue
         i["ret"] = ret
@@ -248,7 +246,6 @@ def upload_process(gist_id, token):
             f'上传完成,vid:{i["detail"]["vid"]},aid:{ret["data"]["aid"]},bvid:{ret["data"]["bvid"]}')
         logging.debug(f"防验证码，暂停 {UPLOAD_SLEEP_SECOND} 秒")
         time.sleep(UPLOAD_SLEEP_SECOND)
-    os.system("biliup renew 2>&1 > /dev/null")
     with open("cookies.json", encoding="utf8") as tmp:
         data = tmp.read()
         update_gist(gist_id, token, COOKIE_FILE, json.loads(data))
