@@ -144,25 +144,24 @@ def download_cover(url, out):
     with open(out, "wb") as tmp:
         tmp.write(res)
 
-def upload(playwright: Playwright,video,_config,cover,detail,cookie) -> None:
-    logging.info(f"打印到这来了")
-    print("开始")
+def upload(playwright: Playwright,video,_config,cover,detail,cookie) -> None: 
+    logging.info("开始")
     title = detail['title']
     if len(title) > 80:
         title = title[:80]
     browser =  playwright.chromium.launch(headless=True)
     context =  browser.new_context(storage_state=cookie)
-    print("授权位置权限")
+    logging.info("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
 
     page =  context.new_page()
-    print("打开上传页面")
+    logging.info("打开上传页面")
     page.goto("https://creator.douyin.com/creator-micro/content/upload?enter_from=dou_web",timeout=50000)
     page.screenshot(path='example.png')
     page.locator('xpath=//*/div[@class="tab-item--33ZEJ active--2Abua"]').click(timeout=20000)
-    print("等待上传页面加载完成") 
+    logging.info("等待上传页面加载完成") 
     page.screenshot(path='example1.png') 
-    print("点击上传")
+    logging.info("点击上传")
     page.locator(
         "span:has-text(\"点击上传 \")").set_input_files(video,timeout=10000000) 
     page.screenshot(path='example2.png') 
@@ -170,9 +169,9 @@ def upload(playwright: Playwright,video,_config,cover,detail,cookie) -> None:
     #page.get_by_placeholder("写一个合适的标题，会有更多人看到").fill(title,timeout=10000000)
     #page.locator(".zone-container").filter(text=re.compile(r".*标题，.*更多人.*")).fill(title)
     page.locator(".zone-container").fill(title)
-    page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click()
-    page.get_by_text("上传封面").click()
-    page.get_by_text("点击上传 或直接将图片文件拖入此区域建议上传4:3(横)或3:4(竖)比例的高清图片，清晰美观的封面利于推荐").click()
+    page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click(timeout=10000000)
+    page.get_by_text("上传封面").click(timeout=10000000)
+    page.get_by_text("点击上传 或直接将图片文件拖入此区域建议上传4:3(横)或3:4(竖)比例的高清图片，清晰美观的封面利于推荐").click(timeout=10000000)
     page.locator(".semi-upload-hidden-input").set_input_files(cover)
     page.get_by_role("button", name="完成").click()
     page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click()
