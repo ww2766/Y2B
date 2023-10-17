@@ -37,7 +37,6 @@ jobs:
         sudo timedatectl set-timezone "Asia/Shanghai"
     - name: Ensure browsers are installed
       run: |
-        python -m playwright install --with-deps
         python -m playwright install chromium
     - name: main logic
       env:
