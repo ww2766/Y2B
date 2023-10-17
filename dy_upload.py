@@ -154,7 +154,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     title = detail['title']
     if len(title) > 80:
         title = title[:80]
-    browser =  playwright.chromium.launch(headless=True)
+    browser =  playwright.chromium.launch(headless=True, args=['--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'])
     #browser =  playwright.chromium.launch(headless=False)
     context =  browser.new_context(storage_state=cookie)
     logging.info("授权位置权限")
@@ -210,7 +210,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     'xpath=//*[@id="root"]//div/button[@class="button--1SZwR primary--1AMXd fixed--3rEwh"]').click(timeout=20000)
     page.wait_for_timeout(6000)
     #path=os.getcwd() + 
-    context.storage_state(COOKIE_FILE)
+    context.storage_state(path=COOKIE_FILE)
     context.close()
     browser.close()
     return {}
