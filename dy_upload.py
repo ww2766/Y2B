@@ -9,6 +9,7 @@ import yaml
 import argparse
 import logging
 import sys
+from PIL import Image
 from playwright.sync_api import Playwright, sync_playwright
 
 UPLOAD_SLEEP_SECOND = 60 * 2  # 2min
@@ -144,12 +145,13 @@ def download_cover(url, out):
     with open(out, "wb") as tmp:
         tmp.write(res)
 
-def upload(playwright: Playwright,video,_config,cover,detail,cookie) -> None: 
+def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None: 
     logging.info("开始")
     title = detail['title']
     if len(title) > 80:
         title = title[:80]
-    browser =  playwright.chromium.launch(headless=True)
+    #browser =  playwright.chromium.launch(headless=True)
+    browser =  playwright.chromium.launch(headless=False)
     context =  browser.new_context(storage_state=cookie)
     logging.info("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
@@ -158,22 +160,14 @@ def upload(playwright: Playwright,video,_config,cover,detail,cookie) -> None:
     logging.info("打开上传页面")
     page.goto("https://creator.douyin.com/creator-micro/content/upload?enter_from=dou_web",timeout=50000)
     page.screenshot(path='example.png')
-    page.locator('xpath=//*/div[@class="tab-item--33ZEJ active--2Abua"]').click(timeout=20000)
+    page.locator('xpath=//*/div[@class="tab-item--33ZEJ active--2Abua"]').click(timeout=50000)
     logging.info("等待上传页面加载完成") 
     page.screenshot(path='example1.png') 
-    logging.info("点击上传")
+    logging.info("点击上传:"+video)
     page.locator(
         "span:has-text(\"点击上传 \")").set_input_files(video,timeout=10000000) 
     page.screenshot(path='example2.png') 
-    #page.get_by_placeholder(text=re.compile(r".*标题，.*更多人.*")).fill(title,timeout=10000000)
-    #page.get_by_placeholder("写一个合适的标题，会有更多人看到").fill(title,timeout=10000000)
-    #page.locator(".zone-container").filter(text=re.compile(r".*标题，.*更多人.*")).fill(title)
-    page.locator(".zone-container").fill(title)
-    page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click(timeout=10000000)
-    page.get_by_text("上传封面").click(timeout=10000000)
-    page.get_by_text("点击上传 或直接将图片文件拖入此区域建议上传4:3(横)或3:4(竖)比例的高清图片，清晰美观的封面利于推荐").click(timeout=10000000)
-    page.locator(".semi-upload-hidden-input").set_input_files(cover)
-    page.get_by_role("button", name="完成").click()
+
     page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click()
     page.get_by_text("教育校园").click()
     page.get_by_text("语言").click()
@@ -182,6 +176,23 @@ def upload(playwright: Playwright,video,_config,cover,detail,cookie) -> None:
     page.get_by_text("请选择合集").click()
     page.get_by_text("儿童动画").click()
     logging.info(f"打印到这来了")
+
+    #page.get_by_placeholder(text=re.compile(r".*标题，.*更多人.*")).fill(title,timeout=10000000)
+    #page.get_by_placeholder("写一个合适的标题，会有更多人看到").fill(title,timeout=10000000)
+    #page.locator(".zone-container").filter(text=re.compile(r".*标题，.*更多人.*")).fill(title)
+    page.locator(".zone-container").fill(title)
+
+    img = Image.open(cover)
+    if img.width>672 and img.height >504: 
+        page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click(timeout=10000000)
+        page.get_by_text("上传封面").click(timeout=10000000)
+        #page.get_by_text("点击上传 或直接将图片文件拖入此区域建议上传4:3(横)或3:4(竖)比例的高清图片，清晰美观的封面利于推荐").click(timeout=10000000)
+        logging.info("上传"+cover)
+        page.locator(".semi-upload-hidden-input").set_input_files(cover,timeout=1000000)
+        #page.get_by_role("button", name="完成").click(timeout=1000000)
+        page.locator(".semi-button-content").filter(has_text="完成")
+        page.get_by_role("button", name="完成").click()
+
     page.on("dialog", lambda dialog: dialog.accept())
     time.sleep(5)
     try:
@@ -194,11 +205,12 @@ def upload(playwright: Playwright,video,_config,cover,detail,cookie) -> None:
     page.locator(
     'xpath=//*[@id="root"]//div/button[@class="button--1SZwR primary--1AMXd fixed--3rEwh"]').click(timeout=20000)
     page.wait_for_timeout(6000)
-
-    context.storage_state(path=os.getcwd() + "/cookie.json")
+    #path=os.getcwd() + 
+    context.storage_state(COOKIE_FILE)
     context.close()
     browser.close()
     return {}
+
 
 
 
