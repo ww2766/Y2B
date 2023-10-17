@@ -143,7 +143,7 @@ def download_video(url, out, format):
 def download_cover(url, out):
     url=url.replace("hqdefault.jpg","maxresdefault.jpg")
     #maxresdefault.jpg
-    resp = requests.get(url, verify=VERIFY,proxies=PROXYS)
+    resp = requests.get(url, verify=VERIFY)
     logging.info("picpic")
     res=resp.content 
     with open(out, "wb") as tmp:
