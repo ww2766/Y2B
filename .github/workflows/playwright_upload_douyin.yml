@@ -1,7 +1,7 @@
 name: playwright upload douyin
 on:
   schedule:
-    - cron: "*/10 * * * *"
+    - cron: "*/60 * * * *"
   push:
     branches:
       - "master"
@@ -33,6 +33,7 @@ jobs:
         python -m pip install playwright
         python -m pip install -r requirements.txt
         python -m pip install yt-dlp --upgrade
+        python -m pip install Pillow
         sudo timedatectl set-timezone "Asia/Shanghai"
     - name: Ensure browsers are installed
       run: |
