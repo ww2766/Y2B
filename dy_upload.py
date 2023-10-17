@@ -178,7 +178,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     page.get_by_text("英语").click()
     page.get_by_text("语言情景剧").click()
     page.get_by_text("请选择合集").click()
-    page.get_by_text("儿童动画").click()
+    page.get_by_text(config['tags']).click()
     logging.info(f"打印到这来了")
 
     #page.get_by_placeholder(text=re.compile(r".*标题，.*更多人.*")).fill(title,timeout=10000000)
@@ -196,7 +196,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         #page.get_by_role("button", name="完成").click(timeout=1000000)
         page.locator(".semi-button-content").filter(has_text="完成")
         page.get_by_role("button", name="完成").click()
-
+    img.close()
     page.on("dialog", lambda dialog: dialog.accept())
     time.sleep(5)
     try:
