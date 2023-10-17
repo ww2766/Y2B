@@ -150,8 +150,8 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     title = detail['title']
     if len(title) > 80:
         title = title[:80]
-    #browser =  playwright.chromium.launch(headless=True)
-    browser =  playwright.chromium.launch(headless=False)
+    browser =  playwright.chromium.launch(headless=True)
+    #browser =  playwright.chromium.launch(headless=False)
     context =  browser.new_context(storage_state=cookie)
     logging.info("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
