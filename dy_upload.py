@@ -185,7 +185,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     #page.get_by_placeholder("写一个合适的标题，会有更多人看到").fill(title,timeout=10000000)
     #page.locator(".zone-container").filter(text=re.compile(r".*标题，.*更多人.*")).fill(title)
     page.locator(".zone-container").fill(title)
-
+    logging.info(cover)
     img = Image.open(cover)
     if img.width>672 and img.height >504: 
         page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click(timeout=10000000)
