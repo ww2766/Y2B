@@ -258,7 +258,7 @@ def upload_process(gist_id, token):
         uploaded[i["detail"]["vid"]] = i
         update_gist(gist_id, token, UPLOADED_VIDEO_FILE, uploaded)
         logging.info(
-            f'上传完成,vid:{i["detail"]["vid"]},aid:{ret["data"]["aid"]},bvid:{ret["data"]["bvid"]}')
+            f'上传完成,vid:{i["detail"]["vid"]}')
         logging.debug(f"防验证码，暂停 {UPLOAD_SLEEP_SECOND} 秒")
         time.sleep(UPLOAD_SLEEP_SECOND)
     with open("cookies.json", encoding="utf8") as tmp:
