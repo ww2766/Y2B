@@ -164,7 +164,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     logging.info("打开上传页面")
     page.goto("https://creator.douyin.com/creator-micro/content/upload?enter_from=dou_web",timeout=50000)
     page.screenshot(path='example.png')
-    page.locator('xpath=//*/div[@class="tab-item--33ZEJ active--2Abua"]').click(timeout=50000)
+    page.locator('xpath=//*/div[@class="tab-item--33ZEJ active--2Abua"]').click(timeout=100000)
     logging.info("等待上传页面加载完成") 
     page.screenshot(path='example1.png') 
     logging.info("点击上传:"+video)
