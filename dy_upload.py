@@ -10,6 +10,7 @@ import argparse
 import logging
 import sys
 from PIL import Image
+from ffmpy import FFmpeg
 from playwright.sync_api import Playwright, sync_playwright
 
 UPLOAD_SLEEP_SECOND = 60 * 2  # 2min
@@ -150,7 +151,7 @@ def download_cover(url, out):
         tmp.write(res)
 
 def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None: 
-    os.mkdir("screenshot")
+    
     logging.info("开始")
     title = detail['title']
     if len(title) > 80:
@@ -233,6 +234,11 @@ def process_one(detail, config, cookie):
         logging.error("无合适格式")
         return
     logging.info(f"打印到这来了")
+    ff = FFmpeg()
+    ff.options("-i "+detail["vid"] + f".{v_ext} -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
+    print(ff.cmd)
+    ff.run()
+    return
     download_cover(detail["cover_url"], detail["vid"] + ".jpg")
     logging.info(f"打印到这来了")
     #ret = upload_video(detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
@@ -283,6 +289,7 @@ if __name__ == "__main__":
         format='%(filename)s:%(lineno)d %(asctime)s.%(msecs)03d %(levelname)s: %(message)s',
         datefmt="%H:%M:%S",
     )
+    os.mkdir("screenshot")
     upload_process(args.gistId, args.token)
         
     
