@@ -150,7 +150,7 @@ def download_cover(url, out):
         tmp.write(res)
 
 def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None: 
-    
+    os.mkdir("screenshot")
     logging.info("开始")
     title = detail['title']
     if len(title) > 80:
@@ -283,7 +283,6 @@ if __name__ == "__main__":
         format='%(filename)s:%(lineno)d %(asctime)s.%(msecs)03d %(levelname)s: %(message)s',
         datefmt="%H:%M:%S",
     )
-    os.mkdir("screenshot")
     upload_process(args.gistId, args.token)
         
     
