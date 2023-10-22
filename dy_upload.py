@@ -157,7 +157,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         title = title[:80]
     browser =  playwright.chromium.launch(headless=True, args=['--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36'])
     #browser =  playwright.chromium.launch(headless=False)
-    context =  browser.new_context(storage_state=cookie)
+    context =  browser.new_context(storage_state=cookie,locale="zh-CN")
     logging.info("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
 
