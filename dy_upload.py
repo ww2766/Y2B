@@ -150,6 +150,7 @@ def download_cover(url, out):
         tmp.write(res)
 
 def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None: 
+    
     logging.info("开始")
     title = detail['title']
     if len(title) > 80:
@@ -163,16 +164,17 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     page =  context.new_page()
     logging.info("打开上传页面")
     page.goto("https://creator.douyin.com/creator-micro/content/upload?enter_from=dou_web",timeout=50000)
-    page.screenshot(path='example.png')
+    page.screenshot(path='./screenshot/example.png')
     page.locator('xpath=//*/div[@class="tab-item--33ZEJ active--2Abua"]').click(timeout=100000)
     logging.info("等待上传页面加载完成") 
-    page.screenshot(path='example1.png') 
+    page.screenshot(path='./screenshot/example1.png') 
     logging.info("点击上传:"+video)
     page.locator(
         "span:has-text(\"点击上传 \")").set_input_files(video,timeout=10000000) 
-    page.screenshot(path='example2.png') 
+    page.screenshot(path='./screenshot/example2.png') 
 
     page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click()
+    page.screenshot(path='./screenshot/example3.png') 
     page.get_by_text("教育校园").click()
     page.get_by_text("语言").click()
     page.get_by_text("英语").click()
@@ -281,4 +283,7 @@ if __name__ == "__main__":
         format='%(filename)s:%(lineno)d %(asctime)s.%(msecs)03d %(levelname)s: %(message)s',
         datefmt="%H:%M:%S",
     )
+    os.mkdir("screenshot")
     upload_process(args.gistId, args.token)
+        
+    
