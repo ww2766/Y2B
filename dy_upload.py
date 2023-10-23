@@ -243,7 +243,6 @@ def process_one(detail, config, cookie):
     #ff.options("-i "+detail["vid"] + f".{v_ext} -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
     print(ff.cmd)
     ff.run()
-    return
     download_cover(detail["cover_url"], detail["vid"] + ".jpg")
     logging.info(f"打印到这来了")
     #ret = upload_video(detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
@@ -266,8 +265,7 @@ def upload_process(gist_id, token):
     for i in need:
         ret = process_one(i["detail"], i["config"], cookie)
         if ret is None:
-            #continue
-            break
+            continue
         i["ret"] = ret
         uploaded[i["detail"]["vid"]] = i
         update_gist(gist_id, token, UPLOADED_VIDEO_FILE, uploaded)
