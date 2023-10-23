@@ -265,7 +265,8 @@ def upload_process(gist_id, token):
     for i in need:
         ret = process_one(i["detail"], i["config"], cookie)
         if ret is None:
-            continue
+            #continue
+            break
         i["ret"] = ret
         uploaded[i["detail"]["vid"]] = i
         update_gist(gist_id, token, UPLOADED_VIDEO_FILE, uploaded)
