@@ -24,11 +24,10 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
-        python-version: '3.11'
-    - run: ./install_zh_fonts.sh
-      shell: bash
+        python-version: '3.11' 
     - name: Install dependencies
       run: |
+        ./install_zh_fonts.sh
         python -m pip install --upgrade pip
         sudo apt-get update
         sudo apt-get install ffmpeg -y
