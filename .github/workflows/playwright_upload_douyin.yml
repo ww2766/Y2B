@@ -21,14 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    #- name: Install CNS11643 fonts
-    #  uses: RisingInIris2017/cjk-fonts-action@v1 
-    - name: Install CNS11643 fonts
-      uses: RisingInIris2017/cjk-fonts-action@v1.0.7  
     - name: Set up Python
       uses: actions/setup-python@v4
       with:
         python-version: '3.11'
+    - run: ${{ github.action_path }}/install_zh_fonts.sh
+      shell: bash
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
