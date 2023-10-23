@@ -236,7 +236,7 @@ def process_one(detail, config, cookie):
     logging.info(f"打印到这来了")
     #ff = FFmpeg()
     ff = FFmpeg(
-        inputs={detail["vid"] + f".{v_ext}: None, 'logo00.png': None},
+        inputs={detail["vid"] + f".{v_ext}": None, 'logo00.png': None},
         outputs={'./screenshot/output.mp4': '-filter_complex overlay= main_w-overlay_w:0'}
     )
     #ff.options("-i "+detail["vid"] + f".{v_ext} -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
