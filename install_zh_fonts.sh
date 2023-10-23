@@ -1,16 +1,8 @@
 #!/bin/bash
 
-
-while getopts 'f:' flag; do
-  case "${flag}" in
-    f) flags="${OPTARG}" ;;
-    *) print_usage
-       exit 1 ;;
-  esac
-done
 unzip Open_Da1.zip
-unzip Open_Da1.zip
-unzip Open_Da1.zip 
+unzip Open_Da2.zip
+unzip Open_Da3.zip 
 
 if [ -d "Open_Data/" ] ; then
 		cp -i Open_Data/Fonts/TW-Kai-*.ttf $HOME/.fonts
