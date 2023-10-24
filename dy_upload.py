@@ -238,7 +238,7 @@ def process_one(detail, config, cookie):
     ff = FFmpeg(
         inputs={detail["vid"] + f".{v_ext}": None, 'logo000.png': None},
         #右下角outputs={'./screenshot/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:main_h-overlay_h-10"'}
-        outputs={'./screenshot/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:10"'}
+        outputs={'./video/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:10"'}
     )
     #ff.options("-i "+detail["vid"] + f".{v_ext} -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
     print(ff.cmd)
@@ -251,7 +251,7 @@ def process_one(detail, config, cookie):
     logging.info(f"打印到这来了")
     with sync_playwright() as playwright:
         #ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail,cookie)
-        ret = upload(playwright,'./screenshot/output.mp4',detail["vid"] + ".jpg", config, detail,cookie)
+        ret = upload(playwright,'./video/output.mp4',detail["vid"] + ".jpg", config, detail,cookie)
     os.remove(detail["vid"] + f".{v_ext}")
     os.remove(detail["vid"] + ".jpg")
     return {}
@@ -295,6 +295,7 @@ if __name__ == "__main__":
         datefmt="%H:%M:%S",
     )
     os.mkdir("screenshot")
+    os.mkdir("video")
     upload_process(args.gistId, args.token)
         
     
