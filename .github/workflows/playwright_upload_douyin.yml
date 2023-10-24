@@ -45,9 +45,13 @@ jobs:
         GIST_ID: ${{secrets.GIST_ID}}
         GIT_TOKEN: ${{secrets.GIT_TOKEN}}
       run: python dy_upload.py $GIT_TOKEN $GIST_ID --logLevel=${{ inputs.logLevel || 'INFO' }}
-    - name: upload result
+    - name: upload screenshot result
       uses: actions/upload-artifact@v1
       with:
-        name: my-artifact
+        name: my-screenshot
         path: ${{ github.workspace }}/screenshot
-
+    - name: upload video result
+      uses: actions/upload-artifact@v1
+      with:
+        name: my-video
+        path: ${{ github.workspace }}/video
