@@ -176,7 +176,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
 
     page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click()
     page.screenshot(path='./screenshot/example3.png') 
-    page.get_by_text("教育校园").click(timeout=100000)
+    page.get_by_text("教育校园").click(timeout=1000000)
     page.get_by_text("语言").click(timeout=100000)
     page.get_by_text("英语").click(timeout=100000)
     page.get_by_text("语言情景剧").click(timeout=100000)
