@@ -176,12 +176,12 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
 
     page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click()
     page.screenshot(path='./screenshot/example3.png') 
-    page.get_by_text("教育校园").click()
-    page.get_by_text("语言").click()
-    page.get_by_text("英语").click()
-    page.get_by_text("语言情景剧").click()
-    page.get_by_text("请选择合集").click()
-    page.get_by_text(config['tags']).click()
+    page.get_by_text("教育校园").click(timeout=100000)
+    page.get_by_text("语言").click(timeout=100000)
+    page.get_by_text("英语").click(timeout=100000)
+    page.get_by_text("语言情景剧").click(timeout=100000)
+    page.get_by_text("请选择合集").click(timeout=100000)
+    page.get_by_text(config['tags']).click(timeout=100000)
     logging.info(f"打印到这来了")
 
     #page.get_by_placeholder(text=re.compile(r".*标题，.*更多人.*")).fill(title,timeout=10000000)
