@@ -225,34 +225,38 @@ def process_one(detail, config, cookie):
     logging.info(f'开始：{detail["vid"]}')
     format = ["webm", "flv", "mp4"]
     v_ext = None
+    video = None
     for ext in format:
-        if download_video(detail["origin"], detail["vid"] + f".{ext}", f"{ext}"):
+        video = detail["vid"] + f".{ext}"
+        if download_video(detail["origin"], video, f"{ext}"):
             v_ext = ext
             logging.info(f"使用格式：{ext}")
             break
     if v_ext is None:
         logging.error("无合适格式")
         return
-    logging.info(f"打印到这来了")
+    logging.info(f"如果视频文件小于10M,不搬运")
+    if get_file_size(video) < 10
+        return
     #ff = FFmpeg()
     ff = FFmpeg(
-        inputs={detail["vid"] + f".{v_ext}": None, 'logo000.png': None},
+        inputs={video: None, 'logo000.png': None},
         #右下角outputs={'./screenshot/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:main_h-overlay_h-10"'}
         outputs={'./video/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:10"'}
     )
-    #ff.options("-i "+detail["vid"] + f".{v_ext} -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
+    #ff.options("-i "+video+" -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
     print(ff.cmd)
     ff.run()
     download_cover(detail["cover_url"], detail["vid"] + ".jpg")
     logging.info(f"打印到这来了")
-    #ret = upload_video(detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail)
+    #ret = upload_video(video,detail["vid"] + ".jpg", config, detail)
     logging.info(f"打印到这来了")
     #playwright=sync_playwright() 
     logging.info(f"打印到这来了")
     with sync_playwright() as playwright:
         #ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail,cookie)
         ret = upload(playwright,'./video/output.mp4',detail["vid"] + ".jpg", config, detail,cookie)
-    os.remove(detail["vid"] + f".{v_ext}")
+    os.remove(video)
     os.remove(detail["vid"] + ".jpg")
     return {}
 
