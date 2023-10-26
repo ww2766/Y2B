@@ -236,7 +236,7 @@ def process_one(detail, config, cookie):
         logging.error("无合适格式")
         return
     logging.info(f"如果视频文件小于10M,不搬运")
-    if get_file_size(video) < 10
+    if get_file_size(video) < 10:
         return
     #ff = FFmpeg()
     ff = FFmpeg(
