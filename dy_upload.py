@@ -174,7 +174,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         "span:has-text(\"点击上传 \")").set_input_files(video,timeout=10000000) 
     page.screenshot(path='./screenshot/example2.png') 
 
-    page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click()
+    page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=100000)
     page.screenshot(path='./screenshot/example3.png') 
     page.get_by_text("教育校园").click(timeout=100000)
     page.get_by_text("语言").click(timeout=100000)
