@@ -167,60 +167,64 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     context =  browser.new_context(storage_state=cookie,locale="zh-CN",record_video_dir="./screenshot/")
     logging.info("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
-
-    page =  context.new_page() 
-    logging.info("打开上传页面")
-    page.goto("https://creator.douyin.com/creator-micro/content/upload",timeout=50000)
-    page.screenshot(path='./screenshot/example.png')
-    page.locator('xpath=//*/div[@class="tab-item--33ZEJ active--2Abua"]').click(timeout=100000)
-    logging.info("等待上传页面加载完成") 
-    page.screenshot(path='./screenshot/example1.png') 
-    logging.info("点击上传:"+video)
-    page.locator(
-        "span:has-text(\"点击上传 \")").set_input_files(video,timeout=10000000) 
-    page.screenshot(path='./screenshot/example2.png')  
-    page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=1000000)
-    page.screenshot(path='./screenshot/example3.png')
-    page.get_by_text("教育校园").click(timeout=100000)
-    page.get_by_text("语言").click(timeout=100000)
-    page.get_by_text("英语").click(timeout=100000)
-    page.get_by_text("语言情景剧").click(timeout=100000)
-    page.get_by_text("请选择合集").click(timeout=100000)
-    page.get_by_text(config['tags']).click(timeout=100000)
-    logging.info(f"打印到这来了")
-
-    #page.get_by_placeholder(text=re.compile(r".*标题，.*更多人.*")).fill(title,timeout=10000000)
-    #page.get_by_placeholder("写一个合适的标题，会有更多人看到").fill(title,timeout=10000000)
-    #page.locator(".zone-container").filter(text=re.compile(r".*标题，.*更多人.*")).fill(title)
-    page.locator(".zone-container").fill(title)
-    logging.info(cover)
-    img = Image.open(cover)
-    if img.width>672 and img.height >504: 
-        page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click(timeout=10000000)
-        page.get_by_text("上传封面").click(timeout=10000000)
-        #page.get_by_text("点击上传 或直接将图片文件拖入此区域建议上传4:3(横)或3:4(竖)比例的高清图片，清晰美观的封面利于推荐").click(timeout=10000000)
-        logging.info("上传"+cover)
-        page.locator(".semi-upload-hidden-input").set_input_files(cover,timeout=1000000)
-        #page.get_by_role("button", name="完成").click(timeout=1000000)
-        page.locator(".semi-button-content").filter(has_text="完成")
-        page.get_by_role("button", name="完成").click()
-    img.close()
-    page.on("dialog", lambda dialog: dialog.accept())
-    time.sleep(5)
     try:
-            page.get_by_text("我知道了").click()
-    except:
-        print("没有找到《我知道了》的按钮")
-        pass
-    print("点击发布")
-
-    page.locator(
-    'xpath=//*[@id="root"]//div/button[@class="button--1SZwR primary--1AMXd fixed--3rEwh"]').click(timeout=20000)
-    page.wait_for_timeout(6000)
-    #path=os.getcwd() + 
-    context.storage_state(path=COOKIE_FILE)
-    context.close()
-    browser.close()
+        page =  context.new_page() 
+        logging.info("打开上传页面")
+        page.goto("https://creator.douyin.com/creator-micro/content/upload",timeout=50000)
+        page.screenshot(path='./screenshot/example.png')
+        page.locator('xpath=//*/div[@class="tab-item--33ZEJ active--2Abua"]').click(timeout=100000)
+        logging.info("等待上传页面加载完成") 
+        page.screenshot(path='./screenshot/example1.png') 
+        logging.info("点击上传:"+video)
+        page.locator(
+            "span:has-text(\"点击上传 \")").set_input_files(video,timeout=10000000) 
+        page.screenshot(path='./screenshot/example2.png')  
+        page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=1000000)
+        page.screenshot(path='./screenshot/example3.png')
+        page.get_by_text("教育校园").click(timeout=100000)
+        page.get_by_text("语言").click(timeout=100000)
+        page.get_by_text("英语").click(timeout=100000)
+        page.get_by_text("语言情景剧").click(timeout=100000)
+        page.get_by_text("请选择合集").click(timeout=100000)
+        page.get_by_text(config['tags']).click(timeout=100000)
+        logging.info(f"打印到这来了")
+    
+        #page.get_by_placeholder(text=re.compile(r".*标题，.*更多人.*")).fill(title,timeout=10000000)
+        #page.get_by_placeholder("写一个合适的标题，会有更多人看到").fill(title,timeout=10000000)
+        #page.locator(".zone-container").filter(text=re.compile(r".*标题，.*更多人.*")).fill(title)
+        page.locator(".zone-container").fill(title)
+        logging.info(cover)
+        img = Image.open(cover)
+        if img.width>672 and img.height >504: 
+            page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click(timeout=10000000)
+            page.get_by_text("上传封面").click(timeout=10000000)
+            #page.get_by_text("点击上传 或直接将图片文件拖入此区域建议上传4:3(横)或3:4(竖)比例的高清图片，清晰美观的封面利于推荐").click(timeout=10000000)
+            logging.info("上传"+cover)
+            page.locator(".semi-upload-hidden-input").set_input_files(cover,timeout=1000000)
+            #page.get_by_role("button", name="完成").click(timeout=1000000)
+            page.locator(".semi-button-content").filter(has_text="完成")
+            page.get_by_role("button", name="完成").click()
+        img.close()
+        page.on("dialog", lambda dialog: dialog.accept())
+        time.sleep(5)
+        try:
+                page.get_by_text("我知道了").click()
+        except:
+            print("没有找到《我知道了》的按钮")
+            pass
+        print("点击发布")
+    
+        page.locator(
+        'xpath=//*[@id="root"]//div/button[@class="button--1SZwR primary--1AMXd fixed--3rEwh"]').click(timeout=20000)
+        page.wait_for_timeout(6000)
+        #path=os.getcwd() + 
+        context.storage_state(path=COOKIE_FILE)
+    except Exception as e:
+        logging.info(e)
+    finally:
+        context.close()
+        browser.close()
+        raise
     return {}
 
 
@@ -268,6 +272,8 @@ def process_one(detail, config, cookie):
             except:
                 ret = upload(playwright,'./video/output.mp4',detail["vid"] + ".jpg", config, detail,cookie)
     print("点击发布")
+    if ret is None:
+        return
     os.remove(video)
     os.remove(detail["vid"] + ".jpg")
     return {}
