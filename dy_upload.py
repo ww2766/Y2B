@@ -162,7 +162,9 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     logging.info("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
 
-    page =  context.new_page({ recordVideo: { dir: 'video/' } })
+    page =  context.new_page()
+     # 启动录制
+    page.video.start(path="./screenshot/recording.mp4")
     logging.info("打开上传页面")
     page.goto("https://creator.douyin.com/creator-micro/content/upload",timeout=50000)
     page.screenshot(path='./screenshot/example.png')
@@ -173,10 +175,25 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     page.locator(
         "span:has-text(\"点击上传 \")").set_input_files(video,timeout=10000000) 
     page.screenshot(path='./screenshot/example2.png') 
-
+    # 停止录制
+    page.video.stop()
+    # 保存录像文件
+    recording_path = page.video.path()
+    # 启动录制
+    page.video.start(path="./screenshot/recording1.mp4")
     page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=1000000)
-    page.screenshot(path='./screenshot/example3.png') 
+    page.screenshot(path='./screenshot/example3.png')
+    # 停止录制
+    page.video.stop()
+    # 保存录像文件
+    recording_path = page.video.path()
+    # 启动录制
+    page.video.start(path="./screenshot/recording2.mp4")
     page.get_by_text("教育校园").click(timeout=100000)
+    # 停止录制
+    page.video.stop()
+    # 保存录像文件
+    recording_path = page.video.path()
     page.get_by_text("语言").click(timeout=100000)
     page.get_by_text("英语").click(timeout=100000)
     page.get_by_text("语言情景剧").click(timeout=100000)
