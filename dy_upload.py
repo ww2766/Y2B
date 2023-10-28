@@ -217,11 +217,6 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     page.locator(
     'xpath=//*[@id="root"]//div/button[@class="button--1SZwR primary--1AMXd fixed--3rEwh"]').click(timeout=20000)
     page.wait_for_timeout(6000)
-    # 停止录制
-    video_path = page.video.stopRecording()
-    # 保存录像文件
-    copy_file(video_path,"./screenshot/recording3.mp4")
-    os.remove(video_path) 
     #path=os.getcwd() + 
     context.storage_state(path=COOKIE_FILE)
     context.close()
