@@ -140,7 +140,13 @@ def download_video(url, out, format):
         return False
         raise e
 
-
+def copy_file(source_file, target_file):
+    # 打开原文件和目标文件
+    with open(source_file, 'rb') as sf, open(target_file, 'wb') as tf:
+        # 读取原文件的内容
+        content = sf.read()
+        # 将读取到的内容写入目标文件
+        tf.write(content) 
 def download_cover(url, out):
     url=url.replace("hqdefault.jpg","maxresdefault.jpg")
     #maxresdefault.jpg
@@ -164,7 +170,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
 
     page =  context.new_page()
      # 启动录制
-    page.video.start(path="./screenshot/recording.mp4")
+    page.video.startRecording()
     logging.info("打开上传页面")
     page.goto("https://creator.douyin.com/creator-micro/content/upload",timeout=50000)
     page.screenshot(path='./screenshot/example.png')
@@ -176,24 +182,29 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         "span:has-text(\"点击上传 \")").set_input_files(video,timeout=10000000) 
     page.screenshot(path='./screenshot/example2.png') 
     # 停止录制
-    page.video.stop()
+    video_path = page.video.stopRecording()
     # 保存录像文件
-    recording_path = page.video.path()
+    copy_file(video_path,"./screenshot/recording0.mp4")
+    os.remove(video_path)
     # 启动录制
-    page.video.start(path="./screenshot/recording1.mp4")
+    page.video.startRecording()
     page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=1000000)
     page.screenshot(path='./screenshot/example3.png')
     # 停止录制
-    page.video.stop()
+    video_path = page.video.stopRecording()
     # 保存录像文件
-    recording_path = page.video.path()
+    copy_file(video_path,"./screenshot/recording1.mp4")
+    os.remove(video_path)
     # 启动录制
-    page.video.start(path="./screenshot/recording2.mp4")
+    page.video.startRecording()
     page.get_by_text("教育校园").click(timeout=100000)
     # 停止录制
-    page.video.stop()
+    video_path = page.video.stopRecording()
     # 保存录像文件
-    recording_path = page.video.path()
+    copy_file(video_path,"./screenshot/recording2.mp4")
+    os.remove(video_path)
+    # 启动录制
+    page.video.startRecording()
     page.get_by_text("语言").click(timeout=100000)
     page.get_by_text("英语").click(timeout=100000)
     page.get_by_text("语言情景剧").click(timeout=100000)
@@ -229,6 +240,11 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     page.locator(
     'xpath=//*[@id="root"]//div/button[@class="button--1SZwR primary--1AMXd fixed--3rEwh"]').click(timeout=20000)
     page.wait_for_timeout(6000)
+    # 停止录制
+    video_path = page.video.stopRecording()
+    # 保存录像文件
+    copy_file(video_path,"./screenshot/recording3.mp4")
+    os.remove(video_path) 
     #path=os.getcwd() + 
     context.storage_state(path=COOKIE_FILE)
     context.close()
