@@ -168,7 +168,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     logging.info("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
 
-    page =  context.new_page(record_video_dir="./screenshot/") 
+    page =  context.new_page() 
     logging.info("打开上传页面")
     page.goto("https://creator.douyin.com/creator-micro/content/upload",timeout=50000)
     page.screenshot(path='./screenshot/example.png')
