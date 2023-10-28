@@ -164,13 +164,11 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         title = title[:80]
     browser =  playwright.chromium.launch(headless=True, args=['--start-maximized','--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.19 (KHTML, like Gecko) Ubuntu/11.10 Chromium/18.0.1025.142 Chrome/18.0.1025.142 Safari/535.19'])
     #browser =  playwright.chromium.launch(headless=False)
-    context =  browser.new_context(storage_state=cookie,locale="zh-CN")
+    context =  browser.new_context(storage_state=cookie,locale="zh-CN",record_video_dir="./screenshot/")
     logging.info("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
 
-    page =  context.new_page()
-     # 启动录制
-    page.video.startRecording()
+    page =  context.new_page() 
     logging.info("打开上传页面")
     page.goto("https://creator.douyin.com/creator-micro/content/upload",timeout=50000)
     page.screenshot(path='./screenshot/example.png')
@@ -180,31 +178,10 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     logging.info("点击上传:"+video)
     page.locator(
         "span:has-text(\"点击上传 \")").set_input_files(video,timeout=10000000) 
-    page.screenshot(path='./screenshot/example2.png') 
-    # 停止录制
-    video_path = page.video.stopRecording()
-    # 保存录像文件
-    copy_file(video_path,"./screenshot/recording0.mp4")
-    os.remove(video_path)
-    # 启动录制
-    page.video.startRecording()
+    page.screenshot(path='./screenshot/example2.png')  
     page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=1000000)
     page.screenshot(path='./screenshot/example3.png')
-    # 停止录制
-    video_path = page.video.stopRecording()
-    # 保存录像文件
-    copy_file(video_path,"./screenshot/recording1.mp4")
-    os.remove(video_path)
-    # 启动录制
-    page.video.startRecording()
     page.get_by_text("教育校园").click(timeout=100000)
-    # 停止录制
-    video_path = page.video.stopRecording()
-    # 保存录像文件
-    copy_file(video_path,"./screenshot/recording2.mp4")
-    os.remove(video_path)
-    # 启动录制
-    page.video.startRecording()
     page.get_by_text("语言").click(timeout=100000)
     page.get_by_text("英语").click(timeout=100000)
     page.get_by_text("语言情景剧").click(timeout=100000)
