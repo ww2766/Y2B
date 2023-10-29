@@ -177,6 +177,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         #page.add_init_script(js)
         
         logging.info("打开上传页面")
+        page.goto("https://bot.sannysoft.com/")
         page.goto("https://creator.douyin.com/creator-micro/content/upload",timeout=50000)
         page.screenshot(path='./screenshot/example.png')
         page.locator('xpath=//*/div[@class="tab-item--33ZEJ active--2Abua"]').click(timeout=100000)
