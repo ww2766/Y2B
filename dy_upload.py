@@ -167,13 +167,15 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     context =  browser.new_context(storage_state=cookie,locale="zh-CN",record_video_dir="./screenshot/")
     logging.info("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
+    context.add_init_script(path='stealth.min.js')
     try:
         page =  context.new_page() 
         # # 关闭Webdriver属性
-        js = """
-                Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});
-                """
-        page.add_init_script(js)
+        #js = """
+        #        Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});
+        #        """
+        #page.add_init_script(js)
+        
         logging.info("打开上传页面")
         page.goto("https://creator.douyin.com/creator-micro/content/upload",timeout=50000)
         page.screenshot(path='./screenshot/example.png')
