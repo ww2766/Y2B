@@ -270,7 +270,7 @@ def process_one(detail, config, cookie):
     #playwright=sync_playwright() 
     logging.info(f"打印到这来了")
     with sync_playwright() as playwright:
-        #ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail,cookie)
+        ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail,cookie)
         try:
             ret = upload(playwright,'./video/output.mp4',detail["vid"] + ".jpg", config, detail,cookie)
         except Exception as e:
