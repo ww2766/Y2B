@@ -266,11 +266,9 @@ def process_one(detail, config, cookie):
         #ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail,cookie)
         try:
             ret = upload(playwright,'./video/output.mp4',detail["vid"] + ".jpg", config, detail,cookie)
-        except:
-            try:
-                ret = upload(playwright,'./video/output.mp4',detail["vid"] + ".jpg", config, detail,cookie)
-            except:
-                ret = upload(playwright,'./video/output.mp4',detail["vid"] + ".jpg", config, detail,cookie)
+        except Exception as e:
+            logging.info(e)
+            
     print("点击发布")
     if ret is None:
         return
