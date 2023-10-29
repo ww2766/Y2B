@@ -203,17 +203,21 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         #page.locator(".zone-container").filter(text=re.compile(r".*标题，.*更多人.*")).fill(title)
         page.locator(".zone-container").fill(title)
         logging.info(cover)
-        img = Image.open(cover)
-        if img.width>672 and img.height >504: 
-            page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click(timeout=10000000)
-            page.get_by_text("上传封面").click(timeout=10000000)
-            #page.get_by_text("点击上传 或直接将图片文件拖入此区域建议上传4:3(横)或3:4(竖)比例的高清图片，清晰美观的封面利于推荐").click(timeout=10000000)
-            logging.info("上传"+cover)
-            page.locator(".semi-upload-hidden-input").set_input_files(cover,timeout=1000000)
-            #page.get_by_role("button", name="完成").click(timeout=1000000)
-            page.locator(".semi-button-content").filter(has_text="完成")
-            page.get_by_role("button", name="完成").click()
-        img.close()
+        try:
+            img = Image.open(cover)
+            if img.width>672 and img.height >504: 
+                page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click(timeout=1000000)
+                page.get_by_text("上传封面").click(timeout=10000000)
+                #page.get_by_text("点击上传 或直接将图片文件拖入此区域建议上传4:3(横)或3:4(竖)比例的高清图片，清晰美观的封面利于推荐").click(timeout=1000000)
+                logging.info("上传"+cover)
+                page.locator(".semi-upload-hidden-input").set_input_files(cover,timeout=100000)
+                #page.get_by_role("button", name="完成").click(timeout=100000)
+                page.locator(".semi-button-content").filter(has_text="完成")
+                page.get_by_role("button", name="完成").click()
+            img.close()
+        except:
+            print("封面处理失败")
+            pass
         page.on("dialog", lambda dialog: dialog.accept())
         time.sleep(5)
         try:
