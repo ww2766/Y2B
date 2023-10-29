@@ -162,9 +162,9 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     title = detail['title']
     if len(title) > 80:
         title = title[:80]
-    browser =  playwright.chromium.launch(headless=True, args=['--start-maximized','--Referer=https://creator.douyin.com/creator-micro/content/upload','--user-agent=Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.19 (KHTML, like Gecko) Ubuntu/11.10 Chromium/18.0.1025.142 Chrome/18.0.1025.142 Safari/535.19'])
+    browser =  playwright.chromium.launch(headless=True)
     #browser =  playwright.chromium.launch(headless=False)
-    context =  browser.new_context(storage_state=cookie,locale="zh-CN",record_video_dir="./screenshot/")
+    context =  browser.new_context(storage_state=cookie,viewport={'width': 1920, 'height': 1080},locale="zh-CN",record_video_dir="./screenshot/")
     logging.info("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
     context.add_init_script(path='stealth.min.js')
