@@ -178,7 +178,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         
         logging.info("打开上传页面")
         page.goto("https://bot.sannysoft.com/")
-        // 执行滚动操作，滚动到 y 轴的最大值处
+        #执行滚动操作，滚动到 y 轴的最大值处
         page.scrollBy({
           top: 0,
           left: 0,
