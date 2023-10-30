@@ -215,9 +215,8 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
                 page.locator(".semi-button-content").filter(has_text="完成")
                 page.get_by_role("button", name="完成").click()
             img.close()
-        except:
-            print("封面处理失败")
-            pass
+        except Exception as e:
+            logging.info(e)
         page.on("dialog", lambda dialog: dialog.accept())
         time.sleep(5)
         try:
