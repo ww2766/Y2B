@@ -164,7 +164,8 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         title = title[:80]
     browser =  playwright.chromium.launch(headless=True)
     #browser =  playwright.chromium.launch(headless=False)
-    context =  browser.new_context(storage_state=cookie,viewport={'width': 1920, 'height': 1080},locale="zh-CN",record_video_dir="./screenshot/"record_video_size={"width": 1920, "height": 1080},
+    context =  browser.new_context(storage_state=cookie,viewport={'width': 1920, 'height': 1080},locale="zh-CN",record_video_dir="./screenshot/",
+                                   record_video_size={"width": 1920, "height": 1080},
                                    user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36')
 
     logging.info("授权位置权限")
