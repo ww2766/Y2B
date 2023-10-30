@@ -234,10 +234,10 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         context.storage_state(path=COOKIE_FILE)
     except Exception as e:
         logging.info(e)
+        raise e
     finally:
         context.close()
         browser.close()
-        raise
     return {}
 
 
@@ -276,7 +276,7 @@ def process_one(detail, config, cookie):
     #playwright=sync_playwright() 
     logging.info(f"打印到这来了")
     with sync_playwright() as playwright:
-        ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail,cookie)
+        #ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail,cookie)
         try:
             ret = upload(playwright,'./video/output.mp4',detail["vid"] + ".jpg", config, detail,cookie)
         except Exception as e:
@@ -304,13 +304,14 @@ def upload_process(gist_id, token):
         uploaded[i["detail"]["vid"]] = i
         update_gist(gist_id, token, UPLOADED_VIDEO_FILE, uploaded)
         logging.info(
-            f'上传完成,vid:{i["detail"]["vid"]}')
+            f'gist file更新上传完成,vid:{i["detail"]["vid"]}')
         break
         logging.debug(f"防验证码，暂停 {UPLOAD_SLEEP_SECOND} 秒")
         time.sleep(UPLOAD_SLEEP_SECOND)
     with open("cookies.json", encoding="utf8") as tmp:
         data = tmp.read()
         update_gist(gist_id, token, COOKIE_FILE, json.loads(data))
+        logging.info("gist cookie更新上传完成")
     os.remove("cookies.json")
 
 
