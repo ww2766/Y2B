@@ -192,6 +192,13 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
             "span:has-text(\"点击上传 \")").set_input_files(video,timeout=1000000) 
         page.screenshot(path='./screenshot/example2.png')  
         page.wait_for_timeout(6000)
+        page.on("dialog", lambda dialog: dialog.accept())
+        try:
+                page.getByRole('button', { hasText: '确定' })).click()
+        except:
+            print("没有找到《确定》的按钮")
+            pass
+        print("点击发布")
         page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=1000000)
         page.screenshot(path='./screenshot/example3.png')
         page.get_by_text("教育校园").click(timeout=100000)
