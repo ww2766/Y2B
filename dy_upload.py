@@ -282,17 +282,16 @@ def process_one(detail, config, cookie):
     )
     #ff.options("-i "+video+" -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
     print(ff.cmd)
-    ff.run()
+    #ff.run()
+    #video='./video/output.mp4'
     download_cover(detail["cover_url"], detail["vid"] + ".jpg")
     logging.info(f"打印到这来了")
     #ret = upload_video(video,detail["vid"] + ".jpg", config, detail)
     logging.info(f"打印到这来了")
-    #playwright=sync_playwright() 
-    logging.info(f"打印到这来了")
     with sync_playwright() as playwright:
-        #ret = upload(playwright, detail["vid"] + f".{v_ext}",detail["vid"] + ".jpg", config, detail,cookie)
+        #ret = upload(playwright, video,detail["vid"] + ".jpg", config, detail,cookie)
         try:
-            ret = upload(playwright,'./video/output.mp4',detail["vid"] + ".jpg", config, detail,cookie)
+            ret = upload(playwright,video,detail["vid"] + ".jpg", config, detail,cookie)
         except Exception as e:
             logging.info(e)
             
