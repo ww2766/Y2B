@@ -171,8 +171,8 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
     logging.info("授权位置权限")
     context.grant_permissions(['geolocation'], origin='https://creator.douyin.com')
     context.add_init_script(path='stealth.min.js')
+    page =  context.new_page()
     try:
-        page =  context.new_page() 
         # # 关闭Webdriver属性
         #js = """
         #        Object.defineProperties(navigator, {webdriver:{get:()=>undefined}});
@@ -239,6 +239,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         context.storage_state(path=COOKIE_FILE)
     except Exception as e:
         logging.info(e)
+        logging.info(page.content())
         raise e
     finally:
         context.close()
