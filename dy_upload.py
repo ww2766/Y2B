@@ -180,9 +180,9 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         #page.add_init_script(js)
         
         logging.info("打开上传页面")
-        page.goto("https://bot.sannysoft.com/")
+        #page.goto("https://bot.sannysoft.com/")
        
-        page.goto("https://creator.douyin.com/creator-micro/content/upload",timeout=50000)
+        page.goto("https://creator.douyin.com/creator-micro/content/upload?enter_from=dou_web",timeout=50000)
         page.screenshot(path='./screenshot/example.png')
         page.locator('xpath=//*/div[@class="tab-item--33ZEJ active--2Abua"]').click(timeout=100000)
         logging.info("等待上传页面加载完成") 
@@ -201,7 +201,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         except:
             print("没有找到《云草稿自动保存》《创建》的按钮")
             pass
-        print("点击发布")
+        #print("点击发布")
         page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=1000000)
         page.screenshot(path='./screenshot/example3.png')
         page.get_by_text("教育校园").click(timeout=100000)
@@ -273,8 +273,8 @@ def process_one(detail, config, cookie):
     if v_ext is None:
         logging.error("无合适格式")
         return
-    logging.info(f"如果视频文件小于10M,不搬运")
-    if get_file_size(video) < 10:
+    logging.info(f"如果视频文件小于5M,不搬运")
+    if get_file_size(video) < 5:
         return
     #ff = FFmpeg()
     ff = FFmpeg(
@@ -284,8 +284,8 @@ def process_one(detail, config, cookie):
     )
     #ff.options("-i "+video+" -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
     print(ff.cmd)
-    #ff.run()
-    #video='./video/output.mp4'
+    ff.run()
+    video='./video/output.mp4'
     download_cover(detail["cover_url"], detail["vid"] + ".jpg")
     logging.info(f"打印到这来了")
     #ret = upload_video(video,detail["vid"] + ".jpg", config, detail)
