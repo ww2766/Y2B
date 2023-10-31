@@ -196,8 +196,10 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         try:
             page.get_by_role("button", name="确定").click()
             print("出现了《云草稿自动保存》的弹出《确定》按钮")
+            page.get_by_role("button", name="创建").click()
+            print("出现了《选择画布》的弹出《创建》按钮")
         except:
-            print("没有找到《云草稿自动保存》《确定》的按钮")
+            print("没有找到《云草稿自动保存》《创建》的按钮")
             pass
         print("点击发布")
         page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=1000000)
