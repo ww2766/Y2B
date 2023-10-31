@@ -194,9 +194,10 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         page.wait_for_timeout(6000)
         page.on("dialog", lambda dialog: dialog.accept())
         try:
-                page.getByRole('button', { hasText: '确定' })).click()
+            page.getByRole('button', { hasText: '确定' })).click()
+            print("出现了《云草稿自动保存》的弹出《确定》按钮")
         except:
-            print("没有找到《确定》的按钮")
+            print("没有找到《云草稿自动保存》《确定》的按钮")
             pass
         print("点击发布")
         page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=1000000)
