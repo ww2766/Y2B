@@ -278,7 +278,7 @@ def process_one(detail, config, cookie):
         return
     logging.info(f"如果视频文件小于5M,不搬运")
     if get_file_size(video) < 5:
-        os.system(f"rm {detail["vid"]}*")
+        os.system(f'rm {detail["vid"]}*')
         return
     srt_files=[]
     if os.path.exists(f'{detail["vid"]}.en.vtt'):
