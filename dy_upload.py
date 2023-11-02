@@ -9,6 +9,8 @@ import yaml
 import argparse
 import logging
 import sys
+from datetime import timedelta
+import srt
 from PIL import Image
 from ffmpy import FFmpeg
 from playwright.sync_api import Playwright, sync_playwright
@@ -121,8 +123,8 @@ def get_all_video(_config):
 def download_video(url, out, format):
     try:
         msg = subprocess.check_output(
-            ["yt-dlp", url, "-f", format, "-o", out], stderr=subprocess.STDOUT)
-        logging.debug(msg[-512:])
+            ["yt-dlp", url, "-f", format,"--write-auto-sub","--sub-format srt","--sub-lang en,zh-Hans", "-o", out], stderr=subprocess.STDOUT)
+        logging.debug(msg[-512:])   
         logging.info(f"视频下载完毕，大小：{get_file_size(out)} MB")
         return True
     except subprocess.CalledProcessError as e:
@@ -274,13 +276,20 @@ def process_one(detail, config, cookie):
         logging.error("无合适格式")
         return
     logging.info(f"如果视频文件小于5M,不搬运")
+    all_srt_files=[]
+    files=os.listdir("./")
+    for file in files:
+        if file.endswith('.srt'):
+            all_srt_files.append(file)
+    logging.info(all_srt_files)
+    merge_subs(all_srt_files)
     if get_file_size(video) < 5:
         return
     #ff = FFmpeg()
     ff = FFmpeg(
         inputs={video: None, 'logo000.png': None},
         #右下角outputs={'./screenshot/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:main_h-overlay_h-10"'}
-        outputs={'./video/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:10"'}
+        outputs={'./video/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:10" -vf "subtitles=merge.srt"'}
     )
     #ff.options("-i "+video+" -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
     print(ff.cmd)
@@ -328,7 +337,101 @@ def upload_process(gist_id, token):
         update_gist(gist_id, token, COOKIE_FILE, json.loads(data))
         logging.info("gist cookie更新上传完成")
     os.remove("cookies.json")
+    
+def langfixed(subtitle_1,subtitle_2):
+    for i in range (len(subtitle_2)):
+        for j in range (len(subtitle_1)):
+            startflag = subtitle_1[j].start
+            endflag = subtitle_1[j].end
+            start = subtitle_2[i].start
+            end = subtitle_2[i].end
+            
+            if j == 0:
+                if start <= startflag and startflag < end < endflag:
+                    subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                    break
+                if start <= startflag and endflag <= end:
+                    subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                    break
+                if startflag < start < endflag and endflag <= end < subtitle_1[j+1].start:
+                    subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                    break
+                if startflag < start < endflag and endflag <= end:
+                    if end - subtitle_1[j+2].start > timedelta(microseconds=0):
+                        subtitle_1[j+1].content += "\n" +  subtitle_2[i].content
+                        break
+                    if endflag - start == end - subtitle_1[j+1].start:
+                        subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                        break
+                    if endflag - start > end - subtitle_1[j+1].start:
+                        subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                        break
+                    else:
+                        subtitle_1[j+1].content += "\n" +  subtitle_2[i].content
+                        break
+                    
+                if startflag <= start and end <= endflag:
+                    subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                    break
+                if start < startflag and end < startflag:
+                    subtitle_1.insert(j,subtitle_2[i])
 
+            else:
+                if subtitle_1[j-1].end < start <= startflag and startflag < end < endflag:
+                    subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                    break
+                if start <= startflag and endflag <= end:
+                    subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                    break
+                if j+1 < len(subtitle_1):
+                    if startflag < start < endflag and endflag <= end < subtitle_1[j+1].start:
+                        subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                        break
+                if startflag < start < endflag and endflag <= end:
+                    if j+2 < len(subtitle_1):
+                        if end - subtitle_1[j+2].start > timedelta(microseconds=0):
+                            subtitle_1[j+1].content += "\n" +  subtitle_2[i].content
+                            break
+                    if j+1 < len(subtitle_1):
+                        if endflag - start == end - subtitle_1[j+1].start:
+                            subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                            break
+                        if endflag - start > end - subtitle_1[j+1].start:
+                            subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                            break
+                        else:
+                            subtitle_1[j+1].content += "\n" +  subtitle_2[i].content
+                            break
+                        
+                if startflag <= start and end <= endflag:
+                    subtitle_1[j].content += "\n" +  subtitle_2[i].content
+                    break
+                if start < startflag and end < startflag:
+                    subtitle_1.insert(j,subtitle_2[i])
+
+ 
+
+def merge_subs(all_file_list):
+    mergesub = list()
+    filecount = 0
+    for file_name in all_file_list:
+        ftype = os.path.splitext(file_name)[1]
+        if ftype == r".srt":
+            filecount = filecount + 1
+            with open(file_name,"r",encoding="utf-8") as fileread:
+                mergesub_list = list(srt.parse(fileread,ignore_errors=False))
+                if filecount == 1:
+                    for i in range (len(mergesub_list)):
+                        mergesub.append(mergesub_list[i])
+                else:
+                    langfixed(mergesub,mergesub_list)
+
+                        
+    merge = list(srt.sort_and_reindex(mergesub))
+    
+    total_file = open("merge.srt","w",encoding="utf-8")
+    total_file.writelines(srt.compose(merge))
+    total_file.close()
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
