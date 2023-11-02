@@ -36,7 +36,7 @@ jobs:
         python -m pip install yt-dlp --upgrade
         python -m pip install Pillow
         python -m pip install ffmpy
-        python -m pip install src
+        python -m pip install srt
         sudo timedatectl set-timezone "Asia/Shanghai"
     - name: Ensure browsers are installed
       run: |
