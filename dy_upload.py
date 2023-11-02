@@ -278,10 +278,25 @@ def process_one(detail, config, cookie):
         return
     logging.info(f"如果视频文件小于5M,不搬运")
     if get_file_size(video) < 5:
+        os.system(f"rm {detail["vid"]}*")
         return
-    all_srt_files= edit_filecontent()[1]
-    logging.info(all_srt_files)
-    merge_subs(all_srt_files)
+    srt_files=[]
+    if os.path.exists(f'{detail["vid"]}.en.vtt'):
+        os.system(f'ffmpeg -i {detail["vid"]}.en.vtt {detail["vid"]}.en.srt')
+    if os.path.exists(f'{detail["vid"]}.zh-Hans.vtt'):
+        os.system(f'ffmpeg -i {detail["vid"]}.zh-Hans.vtt {detail["vid"]}.zh-Hans.srt')
+    if os.path.exists(f'{detail["vid"]}.en.srt'):
+        srt_files.append(f'{detail["vid"]}.en.srt')
+        print(f'文件存在{detail["vid"]}.en.srt')
+    else:
+        print('文件不存在{detail["vid"]}.en.srt')
+    if os.path.exists(f'{detail["vid"]}.zh-Hans.srt'):
+        srt_files.append(f'{detail["vid"]}.zh-Hans.srt')
+        print('文件存在{detail["vid"]}.zh-Hans.srt'')
+    else:
+        print('文件不存在{detail["vid"]}.zh-Hans.srt'')
+    logging.info(srt_files)
+    merge_subs(srt_files)
     #ff = FFmpeg()
     ff = FFmpeg(
         inputs={video: None, 'logo000.png': None},
@@ -429,37 +444,8 @@ def merge_subs(all_file_list):
     total_file = open("merge.srt","w",encoding="utf-8")
     total_file.writelines(srt.compose(merge))
     total_file.close()
-def edit_filecontent():
-    Path = os.getcwd() 
-    all_file_list = os.listdir(Path)
-
-    for file_name in all_file_list:
-        fname = os.path.splitext(file_name)[0].split(".")[-1]
-        ftype = os.path.splitext(file_name)[1]
-        new_filename = fname+r".srt"
-        if ftype == r".vtt":
-            os.rename(os.path.join(Path, file_name), os.path.join(Path, new_filename))
-            with open(new_filename,"r",encoding="utf-8") as filein:
-                a = filein.readlines()
-            with open(new_filename,"w",encoding="utf-8") as fileout:
-                b = "".join(a[3:])
-                fileout.write(b)
-
-            f = open(new_filename,encoding="utf-8")
-            index = 1
-            line = f.readline()
-            with open("_"+new_filename,"a",encoding="utf-8") as new_file:
-                while line:
-                    if "-->" in line:
-                        new_file.write(f"{str(index)}\n{line}")
-                        index += 1
-                    else:
-                        new_file.write(line)
-                    line = f.readline()
-                f.close()
-                os.remove(new_filename)
-                            
-    return Path,all_file_list
+    
+ 
     
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
