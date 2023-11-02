@@ -252,7 +252,9 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         context.storage_state(path=COOKIE_FILE)
     except Exception as e:
         logging.info(e)
-        logging.info(page.content())
+        with open("./screenshot/main.html", "w", encoding="utf8") as tmp:
+            tmp.write(page.content())
+        #logging.info(page.content())
         raise e
     finally:
         context.close()
