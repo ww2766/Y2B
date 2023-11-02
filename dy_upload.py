@@ -289,12 +289,12 @@ def process_one(detail, config, cookie):
         srt_files.append(f'{detail["vid"]}.en.srt')
         print(f'文件存在{detail["vid"]}.en.srt')
     else:
-        print('文件不存在{detail["vid"]}.en.srt')
+        print(f'文件不存在{detail["vid"]}.en.srt')
     if os.path.exists(f'{detail["vid"]}.zh-Hans.srt'):
         srt_files.append(f'{detail["vid"]}.zh-Hans.srt')
-        print('文件存在{detail["vid"]}.zh-Hans.srt'')
+        print(f'文件存在{detail["vid"]}.zh-Hans.srt')
     else:
-        print('文件不存在{detail["vid"]}.zh-Hans.srt'')
+        print(f'文件不存在{detail["vid"]}.zh-Hans.srt')
     logging.info(srt_files)
     merge_subs(srt_files)
     #ff = FFmpeg()
