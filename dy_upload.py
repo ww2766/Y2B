@@ -124,6 +124,7 @@ def download_video(url, out, format):
     try:
         msg = subprocess.check_output(
             ["yt-dlp", url, "-f", format,"--write-auto-sub","--sub-format","srt","--sub-lang","en,zh-Hans", "-o", out], stderr=subprocess.STDOUT)
+        print(subprocess.check_output)
         logging.debug(msg[-512:])   
         logging.info(f"视频下载完毕，大小：{get_file_size(out)} MB")
         return True
@@ -276,15 +277,11 @@ def process_one(detail, config, cookie):
         logging.error("无合适格式")
         return
     logging.info(f"如果视频文件小于5M,不搬运")
-    all_srt_files=[]
-    files=os.listdir("./")
-    for file in files:
-        if file.endswith('.srt'):
-            all_srt_files.append(file)
-    logging.info(all_srt_files)
-    merge_subs(all_srt_files)
     if get_file_size(video) < 5:
         return
+    all_srt_files= edit_filecontent()[1]
+    logging.info(all_srt_files)
+    merge_subs(all_srt_files)
     #ff = FFmpeg()
     ff = FFmpeg(
         inputs={video: None, 'logo000.png': None},
@@ -432,7 +429,38 @@ def merge_subs(all_file_list):
     total_file = open("merge.srt","w",encoding="utf-8")
     total_file.writelines(srt.compose(merge))
     total_file.close()
+def edit_filecontent():
+    Path = os.getcwd() 
+    all_file_list = os.listdir(Path)
 
+    for file_name in all_file_list:
+        fname = os.path.splitext(file_name)[0].split(".")[-1]
+        ftype = os.path.splitext(file_name)[1]
+        new_filename = fname+r".srt"
+        if ftype == r".vtt":
+            os.rename(os.path.join(Path, file_name), os.path.join(Path, new_filename))
+            with open(new_filename,"r",encoding="utf-8") as filein:
+                a = filein.readlines()
+            with open(new_filename,"w",encoding="utf-8") as fileout:
+                b = "".join(a[3:])
+                fileout.write(b)
+
+            f = open(new_filename,encoding="utf-8")
+            index = 1
+            line = f.readline()
+            with open("_"+new_filename,"a",encoding="utf-8") as new_file:
+                while line:
+                    if "-->" in line:
+                        new_file.write(f"{str(index)}\n{line}")
+                        index += 1
+                    else:
+                        new_file.write(line)
+                    line = f.readline()
+                f.close()
+                os.remove(new_filename)
+                            
+    return Path,all_file_list
+    
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("token", help="github api token", type=str)
