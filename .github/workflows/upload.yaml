@@ -39,6 +39,7 @@ jobs:
           sudo mv biliupR-$BILI_UP_VER-x86_64-linux/biliup /usr/local/bin/
           sudo chmod +x /usr/local/bin/biliup
           pip install yt-dlp --upgrade
+          pip install src
           sudo timedatectl set-timezone "Asia/Shanghai"
       - name: main logic
         env:
