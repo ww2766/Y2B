@@ -9,5 +9,5 @@ if [ ! -d "$HOME/.fonts" ] ; then
     mkdir $HOME/.fonts
     echo -e "create ~/.fonts/ \n"
 fi
-cp -i Open_Data/Fonts/alimamafa*.ttf $HOME/.fonts
+cp -i Open_Data/Fonts/siyuan*.ttf $HOME/.fonts
 sudo fc-cache -fv
