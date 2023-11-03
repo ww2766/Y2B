@@ -206,7 +206,7 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
             pass
         #print("点击发布")
         try:
-            page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=1000000)
+            page.locator("div").filter(has_text=re.compile(r"^视频分类请选择视频内容分类$")).locator("svg").nth(1).click(timeout=100000)
             page.screenshot(path='./screenshot/example3.png')
             page.get_by_text("教育校园").click(timeout=100000)
             page.wait_for_timeout(6000)
@@ -228,8 +228,8 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
         try:
             img = Image.open(cover)
             if img.width>672 and img.height >504: 
-                page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click(timeout=1000000)
-                page.get_by_text("上传封面").click(timeout=10000000)
+                page.locator("div").filter(has_text=re.compile(r"^选择封面$")).nth(2).click(timeout=100000)
+                page.get_by_text("上传封面").click(timeout=100000)
                 #page.get_by_text("点击上传 或直接将图片文件拖入此区域建议上传4:3(横)或3:4(竖)比例的高清图片，清晰美观的封面利于推荐").click(timeout=1000000)
                 logging.info("上传"+cover)
                 page.locator(".semi-upload-hidden-input").set_input_files(cover,timeout=100000)
