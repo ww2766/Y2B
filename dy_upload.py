@@ -303,6 +303,7 @@ def process_one(detail, config, cookie):
         print(f'文件不存在{detail["vid"]}.zh-Hans.srt')
     logging.info(srt_files)
     merge_subs(srt_files)
+    print(os.listdir())
     #ff = FFmpeg()
     ff = FFmpeg(
         #inputs={video: None, 'logo000.png': None},
