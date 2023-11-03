@@ -214,11 +214,12 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
             page.get_by_text("英语").click(timeout=100000)
             page.wait_for_timeout(6000)
             page.get_by_text("语言情景剧").click(timeout=100000)
-            page.get_by_text("请选择合集").click(timeout=100000)
-            page.get_by_text(config['tags']).click(timeout=100000)
-            logging.info(f"打印到这来了")
         except Exception as e:
             logging.info(e)
+        page.get_by_text("请选择合集").click(timeout=100000)
+        page.get_by_text(config['tags']).click(timeout=100000)
+        logging.info(f"打印到这来了")
+
         #page.get_by_placeholder(text=re.compile(r".*标题，.*更多人.*")).fill(title,timeout=10000000)
         #page.get_by_placeholder("写一个合适的标题，会有更多人看到").fill(title,timeout=10000000)
         #page.locator(".zone-container").filter(text=re.compile(r".*标题，.*更多人.*")).fill(title)
