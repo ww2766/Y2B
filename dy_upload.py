@@ -305,7 +305,7 @@ def process_one(detail, config, cookie):
     merge_subs(srt_files)
     print(os.listdir())
     subtitles='';
-    os.path.exists(f'merge.srt'):
+    if os.path.exists(f'merge.srt'):
         subtitles=',subtitles=merge.srt'
     #ff = FFmpeg()
     ff = FFmpeg(
