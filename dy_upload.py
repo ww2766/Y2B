@@ -448,23 +448,24 @@ def merge_subs(all_file_list):
             filecount = filecount + 1
             with open(file_name,"r",encoding="utf-8") as fileread:
                 mergesub_list = list(srt.parse(fileread,ignore_errors=False))
-                print(mergesub_list)
-                
+                base=''
                 for i in range (1,len(mergesub_list)-1):
-                    if len(mergesub_list[i-1].content.rstrip('\n').lstrip('\n').split("\n"))<2:
+                    if len(mergesub_list[i].content.rstrip().lstrip().split("\n"))<2:
+                        base=mergesub_list[i].content.rstrip().lstrip().split("\n")[0]
                         continue
-                    if len(mergesub_list[i].content.rstrip('\n').lstrip('\n').split("\n"))<2:
-                        continue
-                    if mergesub_list[i].content.rstrip('\n').lstrip('\n').split("\n")[0]==mergesub_list[i-1].content.rstrip('\n').lstrip('\n').split("\n")[1]:
-                        mergesub_list[i].content=mergesub_list[i].content.rstrip('\n').lstrip('\n').split("\n")[1]
+                    if mergesub_list[i].content.rstrip().lstrip().split("\n")[0]==base:
+                        base=mergesub_list[i].content=mergesub_list[i].content.rstrip().lstrip().split("\n")[1]
+                    else:
+                        base=mergesub_list[i].content.rstrip().lstrip().split("\n")[1]
+               
                 if filecount == 1:
                     for i in range (len(mergesub_list)):
                         mergesub.append(mergesub_list[i])
                 else:
                     langfixed(mergesub,mergesub_list)
-                print(mergesub_list)            
-    print(mergesub)
-    raise
+                #print(mergesub_list)            
+    #print(mergesub)
+    #raise
     if len(mergesub)==0:
         return                    
     merge = list(srt.sort_and_reindex(mergesub))
