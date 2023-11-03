@@ -448,6 +448,8 @@ def merge_subs(all_file_list):
             filecount = filecount + 1
             with open(file_name,"r",encoding="utf-8") as fileread:
                 mergesub_list = list(srt.parse(fileread,ignore_errors=False))
+                print(mergesub_list)
+                raise
                 for i in range (1,len(mergesub_list)-1):
                     if len(mergesub_list[i-1].content.split("\n"))<2:
                         continue
