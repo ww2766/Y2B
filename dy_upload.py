@@ -303,7 +303,7 @@ def process_one(detail, config, cookie):
         print(f'文件不存在{detail["vid"]}.zh-Hans.srt')
     logging.info(srt_files)
     subtitles='';
-    if len(srt_files)>0
+    if len(srt_files)>0:
         merge_subs(srt_files)
         if os.path.exists(f'merge.srt'):
             subtitles=',subtitles=merge.srt'
