@@ -304,9 +304,11 @@ def process_one(detail, config, cookie):
     merge_subs(srt_files)
     #ff = FFmpeg()
     ff = FFmpeg(
-        inputs={video: None, 'logo000.png': None},
+        #inputs={video: None, 'logo000.png': None},
+        inputs={video: None},
         #右下角outputs={'./screenshot/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:main_h-overlay_h-10"'}
-        outputs={'./video/output.mp4': '-filter_complex \"[0:v]overlay=main_w-overlay_w-10:10;[0:v]subtitles=merge.srt\"'}
+        #outputs={'./video/output.mp4': '-filter_complex \"[0:v]overlay=main_w-overlay_w-10:10;[0:v]subtitles=merge.srt\"'}
+        outputs={'./video/output.mp4': '-vf "movie=logo000.png[watermark];[in][watermark]overlay=main_w-overlay_w-10:10,subtitles=merge.srt[out]"'}
     )
     #ff.options("-i "+video+" -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
     print(ff.cmd)
