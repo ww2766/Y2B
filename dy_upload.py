@@ -449,7 +449,7 @@ def merge_subs(all_file_list):
             with open(file_name,"r",encoding="utf-8") as fileread:
                 mergesub_list = list(srt.parse(fileread,ignore_errors=False))
                 print(mergesub_list)
-                raise
+                
                 for i in range (1,len(mergesub_list)-1):
                     if len(mergesub_list[i-1].content.rstrip('\n').lstrip('\n').split("\n"))<2:
                         continue
@@ -462,7 +462,9 @@ def merge_subs(all_file_list):
                         mergesub.append(mergesub_list[i])
                 else:
                     langfixed(mergesub,mergesub_list)
-
+                print(mergesub_list)            
+    print(mergesub)
+    raise
     if len(mergesub)==0:
         return                    
     merge = list(srt.sort_and_reindex(mergesub))
