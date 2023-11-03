@@ -313,7 +313,7 @@ def process_one(detail, config, cookie):
         inputs={video: None},
         #右下角outputs={'./screenshot/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:main_h-overlay_h-10"'}
         #outputs={'./video/output.mp4': '-filter_complex \"[0:v]overlay=main_w-overlay_w-10:10;[0:v]subtitles=merge.srt\"'}
-        outputs={'./video/output.mp4': f'-vf \"movie=logo000.png[watermark];[in][watermark]overlay=main_w-overlay_w-10:10{subtitles}[out]\"'}
+        outputs={'./video/output.mp4': f'-vf \\"movie=logo000.png[watermark];[in][watermark]overlay=main_w-overlay_w-10:10{subtitles}[out]\\"'}
     )
     #ff.options("-i "+video+" -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
     print(ff.cmd)
