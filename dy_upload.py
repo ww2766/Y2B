@@ -302,18 +302,19 @@ def process_one(detail, config, cookie):
     else:
         print(f'文件不存在{detail["vid"]}.zh-Hans.srt')
     logging.info(srt_files)
-    merge_subs(srt_files)
-    print(os.listdir())
     subtitles='';
-    if os.path.exists(f'merge.srt'):
-        subtitles=',subtitles=merge.srt'
+    if len(srt_files)>0
+        merge_subs(srt_files)
+        if os.path.exists(f'merge.srt'):
+            subtitles=',subtitles=merge.srt'
+    print(os.listdir())    
     #ff = FFmpeg()
     ff = FFmpeg(
         #inputs={video: None, 'logo000.png': None},
         inputs={video: None},
         #右下角outputs={'./screenshot/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:main_h-overlay_h-10"'}
         #outputs={'./video/output.mp4': '-filter_complex \"[0:v]overlay=main_w-overlay_w-10:10;[0:v]subtitles=merge.srt\"'}
-        outputs={'./video/output.mp4': rf"-vf 'movie=logo000.png[watermark];[in][watermark]overlay=main_w-overlay_w-10:10{subtitles}[out]'"}
+        outputs={'./video/output.mp4': rf'-vf "movie=logo000.png[watermark];[in][watermark]overlay=main_w-overlay_w-10:10{subtitles}[out]"'}
     )
     #ff.options("-i "+video+" -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
     print(ff.cmd)
@@ -436,7 +437,7 @@ def langfixed(subtitle_1,subtitle_2):
  
 
 def merge_subs(all_file_list):
-    if len(all_file_list):
+    if len(all_file_list)==0:
         return
     
     mergesub = list()
@@ -453,7 +454,7 @@ def merge_subs(all_file_list):
                 else:
                     langfixed(mergesub,mergesub_list)
 
-    if len(mergesub):
+    if len(mergesub)==0:
         return                    
     merge = list(srt.sort_and_reindex(mergesub))
     
