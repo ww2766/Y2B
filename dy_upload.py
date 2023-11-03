@@ -436,6 +436,9 @@ def langfixed(subtitle_1,subtitle_2):
  
 
 def merge_subs(all_file_list):
+    if len(all_file_list):
+        return
+    
     mergesub = list()
     filecount = 0
     for file_name in all_file_list:
@@ -450,7 +453,8 @@ def merge_subs(all_file_list):
                 else:
                     langfixed(mergesub,mergesub_list)
 
-                        
+    if len(mergesub):
+        return                    
     merge = list(srt.sort_and_reindex(mergesub))
     
     total_file = open("merge.srt","w",encoding="utf-8")
