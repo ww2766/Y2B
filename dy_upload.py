@@ -287,7 +287,7 @@ def process_one(detail, config, cookie):
         os.system(f'rm {detail["vid"]}*')
         return
     print(os.listdir())
-    if size > 500:
+    if size < 500:
         srt_files=[]
         if os.path.exists(f'{detail["vid"]}.en.vtt'):
             os.system(f'ffmpeg -i {detail["vid"]}.en.vtt {detail["vid"]}.en.srt')
