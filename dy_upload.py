@@ -282,44 +282,46 @@ def process_one(detail, config, cookie):
         logging.error("无合适格式")
         return
     logging.info(f"如果视频文件小于5M,不搬运")
-    if get_file_size(video) < 5:
+    size=get_file_size(video)
+    if size < 5:
         os.system(f'rm {detail["vid"]}*')
         return
     print(os.listdir())
-    srt_files=[]
-    if os.path.exists(f'{detail["vid"]}.en.vtt'):
-        os.system(f'ffmpeg -i {detail["vid"]}.en.vtt {detail["vid"]}.en.srt')
-    if os.path.exists(f'{detail["vid"]}.zh-Hans.vtt'):
-        os.system(f'ffmpeg -i {detail["vid"]}.zh-Hans.vtt {detail["vid"]}.zh-Hans.srt')
-    if os.path.exists(f'{detail["vid"]}.en.srt'):
-        srt_files.append(f'{detail["vid"]}.en.srt')
-        print(f'文件存在{detail["vid"]}.en.srt')
-    else:
-        print(f'文件不存在{detail["vid"]}.en.srt')
-    if os.path.exists(f'{detail["vid"]}.zh-Hans.srt'):
-        srt_files.append(f'{detail["vid"]}.zh-Hans.srt')
-        print(f'文件存在{detail["vid"]}.zh-Hans.srt')
-    else:
-        print(f'文件不存在{detail["vid"]}.zh-Hans.srt')
-    logging.info(srt_files)
-    subtitles='';
-    if len(srt_files)>0:
-        merge_subs(srt_files)
-        if os.path.exists(f'merge.srt'):
-            subtitles=',subtitles=merge.srt'
-    print(os.listdir())    
-    #ff = FFmpeg()
-    ff = FFmpeg(
-        #inputs={video: None, 'logo000.png': None},
-        inputs={video: None},
-        #右下角outputs={'./screenshot/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:main_h-overlay_h-10"'}
-        #outputs={'./video/output.mp4': '-filter_complex \"[0:v]overlay=main_w-overlay_w-10:10;[0:v]subtitles=merge.srt\"'}
-        outputs={'./video/output.mp4': rf'-vf "movie=logo000.png[watermark];[in][watermark]overlay=main_w-overlay_w-10:10{subtitles}[out]"'}
-    )
-    #ff.options("-i "+video+" -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
-    print(ff.cmd)
-    ff.run()
-    video='./video/output.mp4'
+    if size > 500:
+        srt_files=[]
+        if os.path.exists(f'{detail["vid"]}.en.vtt'):
+            os.system(f'ffmpeg -i {detail["vid"]}.en.vtt {detail["vid"]}.en.srt')
+        if os.path.exists(f'{detail["vid"]}.zh-Hans.vtt'):
+            os.system(f'ffmpeg -i {detail["vid"]}.zh-Hans.vtt {detail["vid"]}.zh-Hans.srt')
+        if os.path.exists(f'{detail["vid"]}.en.srt'):
+            srt_files.append(f'{detail["vid"]}.en.srt')
+            print(f'文件存在{detail["vid"]}.en.srt')
+        else:
+            print(f'文件不存在{detail["vid"]}.en.srt')
+        if os.path.exists(f'{detail["vid"]}.zh-Hans.srt'):
+            srt_files.append(f'{detail["vid"]}.zh-Hans.srt')
+            print(f'文件存在{detail["vid"]}.zh-Hans.srt')
+        else:
+            print(f'文件不存在{detail["vid"]}.zh-Hans.srt')
+        logging.info(srt_files)
+        subtitles='';
+        if len(srt_files)>0:
+            merge_subs(srt_files)
+            if os.path.exists(f'merge.srt'):
+                subtitles=',subtitles=merge.srt'
+        print(os.listdir())    
+        #ff = FFmpeg()
+        ff = FFmpeg(
+            #inputs={video: None, 'logo000.png': None},
+            inputs={video: None},
+            #右下角outputs={'./screenshot/output.mp4': '-filter_complex "overlay=main_w-overlay_w-10:main_h-overlay_h-10"'}
+            #outputs={'./video/output.mp4': '-filter_complex \"[0:v]overlay=main_w-overlay_w-10:10;[0:v]subtitles=merge.srt\"'}
+            outputs={'./video/output.mp4': rf'-vf "movie=logo000.png[watermark];[in][watermark]overlay=main_w-overlay_w-10:10{subtitles}[out]"'}
+        )
+        #ff.options("-i "+video+" -i logo00.png -filter_complex overlay= main_w-overlay_w:0 ./screenshot/output.mp4")
+        print(ff.cmd)
+        ff.run()
+        video='./video/output.mp4'
     download_cover(detail["cover_url"], detail["vid"] + ".jpg")
     logging.info(f"打印到这来了")
     #ret = upload_video(video,detail["vid"] + ".jpg", config, detail)
