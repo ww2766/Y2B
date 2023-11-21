@@ -283,7 +283,7 @@ def process_one(detail, config, cookie):
         return
     logging.info(f"如果视频文件小于5M,不搬运")
     size=get_file_size(video)
-    if size < 5:
+    if size < 5 or size >500:
         os.system(f'rm {detail["vid"]}*')
         return
     print(os.listdir())
