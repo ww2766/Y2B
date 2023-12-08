@@ -1,7 +1,7 @@
 name: playwright upload douyin
 on:
   schedule:
-    - cron: "*/60 * * * *"
+    - cron: "*/30 * * * *"
   push:
     branches:
       - "master"
