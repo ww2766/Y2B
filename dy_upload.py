@@ -218,7 +218,9 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
             logging.info(e)
         page.get_by_text("请选择合集").click(timeout=100000)
         logging.info(config['tags'])
-        page.get_by_text(config['tags']).click(timeout=100000)
+        page.wait_for_timeout(6000)
+        #page.get_by_text(config['tags']).click(timeout=100000)
+        page.locator("div").filter(has_text=re.compile(config['tags'])).click()
         
 
         #page.get_by_placeholder(text=re.compile(r".*标题，.*更多人.*")).fill(title,timeout=10000000)
