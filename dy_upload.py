@@ -218,12 +218,14 @@ def upload(playwright: Playwright,video,cover,config,detail,cookie) -> None:
             logging.info(e)
         page.get_by_text("请选择合集").click(timeout=100000)
         page.get_by_text(config['tags']).click(timeout=100000)
-        logging.info(f"打印到这来了")
+        logging.info(config['tags'])
 
         #page.get_by_placeholder(text=re.compile(r".*标题，.*更多人.*")).fill(title,timeout=10000000)
         #page.get_by_placeholder("写一个合适的标题，会有更多人看到").fill(title,timeout=10000000)
         #page.locator(".zone-container").filter(text=re.compile(r".*标题，.*更多人.*")).fill(title)
-        page.locator(".zone-container").fill(title)
+        #page.locator(".zone-container").fill(title)
+        page.get_by_placeholder("好的作品标题可获得更多浏览").click()
+        page.get_by_placeholder("好的作品标题可获得更多浏览").fill(title)
         logging.info(cover)
         try:
             img = Image.open(cover)
