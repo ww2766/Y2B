@@ -19,6 +19,7 @@ UPLOAD_SLEEP_SECOND = 60 * 2  # 2min
 UPLOADED_VIDEO_FILE = "dy_uploaded_video.json"
 CONFIG_FILE = "config.json"
 COOKIE_FILE = "dy_cookie.json"
+YOUTUBE_COOKIE_FILE = "youtube.cookie"
 VERIFY = os.environ.get("verify", "1") == "1"
 PROXY = {
     "https": os.environ.get("https_proxy", None)
@@ -44,6 +45,9 @@ def get_gist(_gid, token):
         UPLOADED_VIDEO_FILE, {}).get("content", "{}")
     c = json.loads(_data["files"][CONFIG_FILE]["content"])
     t = json.loads(_data["files"][COOKIE_FILE]["content"])
+    y = _data["files"][YOUTUBE_COOKIE_FILE]["content"]
+    with open(YOUTUBE_COOKIE_FILE, "w", encoding="utf8") as tmp:
+        tmp.write(y)
     try:
         u = json.loads(uploaded_file)
         return c, t, u
@@ -123,7 +127,7 @@ def get_all_video(_config):
 def download_video(url, out, format):
     try:
         msg = subprocess.check_output(
-            ["yt-dlp", url, "-f", format,"--write-auto-sub","--sub-format","srt","--sub-lang","en,zh-Hans", "-o", out], stderr=subprocess.STDOUT)
+            ["yt-dlp", url,"--cookies",YOUTUBE_COOKIE_FILE, "-f", format,"--write-auto-sub","--sub-format","srt","--sub-lang","en,zh-Hans", "-o", out], stderr=subprocess.STDOUT)
         print(subprocess.check_output)
         logging.debug(msg[-512:])   
         logging.info(f"视频下载完毕，大小：{get_file_size(out)} MB")
